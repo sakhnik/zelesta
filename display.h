@@ -6,6 +6,7 @@
 
 // Video RAM
 extern volatile uint8_t display[MAX_ANODES];
+extern volatile uint8_t display_dots;
 
 // Initialize the display
 void display_init(void);

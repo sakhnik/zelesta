@@ -1,37 +1,43 @@
 //#define F_CPU 4000000ul  // 4 MHz
 #include "display.h"
 #include "logo.h"
-#include <avr/io.h>
+#include "defs.h"
+#include "clock.h"
 #include <avr/interrupt.h>
 //#include <util/delay.h>
 
 #define TCNT0_START             (256 - 61)
 
+#ifdef ARTIFICIAL_JIFFIES
 volatile uint8_t jiffies = 0;
+#endif
 
 volatile uint8_t logo_done = 0;
 
 ISR(TIMER0_OVF_vect)
 {
     TCNT0 = TCNT0_START;
+#ifdef ARTIFICIAL_JIFFIES
     ++jiffies;
+#endif
     if (!logo_done)
         logo_done = !logo_show();
-    if (logo_done && jiffies == 0x80)
-        display[0] = 0;
+    else
+        clock_show_running();
     display_process();
 }
 
 ISR(TIMER2_OVF_vect)
 {
     if (logo_done)
-        display[0] = ~0;
+        clock_process();
 }
 
 int main(void)
 {
     display_init();
     logo_init();
+    clock_init();
 
     TIMSK = 0;
 

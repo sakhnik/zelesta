@@ -8,6 +8,7 @@
 
 // Initially no digits are displayed.
 volatile uint8_t display[MAX_ANODES] = { 0, 0, 0, 0, 0 };
+volatile uint8_t display_dots = 0;
 
 void display_init(void)
 {
@@ -31,7 +32,7 @@ void display_process(void)
     // Switch previous off
     PORTC = ANODE_LEVEL(0);
     // Prepare next character
-    PORTD = CATHODE_LEVEL(display[cur_anode]);
+    PORTD = CATHODE_LEVEL(display[cur_anode] | (display_dots ? (1<<7) : 0));
     // Switch next on
     PORTC = ANODE_LEVEL(1 << cur_anode);
 }
