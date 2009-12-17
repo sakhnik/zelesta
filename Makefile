@@ -178,6 +178,9 @@ HEXROMTRG=$(PROJECTNAME).hex
 HEXTRG=$(HEXROMTRG) $(PROJECTNAME).ee.hex
 GDBINITFILE=gdbinit-$(PROJECTNAME)
 
+DEPDIR=.deps
+DEPFILES = $(DEPDIR)/$(*F)
+
 # Define all object files.
 
 # Start by splitting source files by type
@@ -259,17 +262,24 @@ $(TRG): $(OBJDEPS)
 #### Generating object files ####
 # object from C
 .c.o:
+	@mkdir -p $(DEPDIR)
+	@$(CC) $(CFLAGS) -M $< >$(DEPFILES).dep
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
 # object from C++ (.cc, .cpp, .C files)
 .cc.o .cpp.o .C.o :
+	@mkdir -p $(DEPDIR)
+	@$(CC) $(CFLAGS) -M $< >$(DEPFILES).dep
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # object from asm
 .S.o :
 	$(CC) $(ASMFLAGS) -c $< -o $@
 
+-include $(CFILES:%.c=$(DEPDIR)/%.dep) \
+         $(CCFILES:%.cc=$(DEPDIR)/%.dep) \
+         $(CPPFILES:%.cpp=$(DEPDIR)/%.dep)
 
 #### Generating hex files ####
 # hex files from elf
@@ -305,6 +315,7 @@ $(GDBINITFILE): $(TRG)
 
 #### Cleanup ####
 clean:
+	-$(REMOVE) -r $(DEPDIR)
 	$(REMOVE) $(TRG) $(TRG).map $(DUMPTRG)
 	$(REMOVE) $(OBJDEPS)
 	$(REMOVE) $(LST) $(GDBINITFILE)
