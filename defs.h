@@ -1,5 +1,6 @@
 #pragma once
 
+#define F_CPU 1000000ul  // 1 MHz
 #include <avr/io.h>
 
 // Undef the macro ARTIFICIAL_JIFFIES if the jiffies can't be read
