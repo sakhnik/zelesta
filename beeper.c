@@ -2,7 +2,8 @@
 #include "defs.h"
 
 // Duration counter
-uint16_t beeper_left = 0;
+int16_t beeper_jiffies_left = 0;
+uint8_t beeper_prev_jiffies = 0;
 
 static void beeper_switch(uint8_t on)
 {
@@ -38,15 +39,20 @@ void beeper_set(uint16_t frequency,
 
     // Let the symphony start!
     beeper_switch(1);
-    beeper_left = duration;
+    beeper_prev_jiffies = jiffies;
+    beeper_jiffies_left = duration;
 }
 
 void beeper_process(void)
 {
-    if (!beeper_left)
+    if (!beeper_jiffies_left)
         return;
-    if (--beeper_left)
+    beeper_jiffies_left -= (uint8_t)(jiffies - beeper_prev_jiffies);
+    beeper_prev_jiffies = jiffies;
+
+    if (beeper_jiffies_left > 0)
         return;
+    beeper_jiffies_left = 0;
     // Turn off PWM
     beeper_switch(0);
 }

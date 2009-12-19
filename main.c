@@ -7,7 +7,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define TCNT0_START             (256 - 61)
+#define TCNT0_START             (256 - 56)
 
 #ifdef ARTIFICIAL_JIFFIES
 volatile uint8_t jiffies = 0;
@@ -41,7 +41,6 @@ int main(void)
     //logo_init();
     //clock_init();
     beeper_init();
-    beeper_set(440, 255);
 
     TIMSK = 0;
 
@@ -61,6 +60,7 @@ int main(void)
     TIMSK |= _BV(TOIE2);
 
     sei();
+    beeper_set(440, 255);
 
     while (1)
     {
