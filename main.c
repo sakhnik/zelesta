@@ -4,6 +4,7 @@
 #include "clock.h"
 #include "charset.h"
 #include "beeper.h"
+#include "keypad.h"
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -41,6 +42,7 @@ int main(void)
     //logo_init();
     //clock_init();
     beeper_init();
+    keypad_init();
 
     TIMSK = 0;
 
@@ -64,6 +66,9 @@ int main(void)
 
     while (1)
     {
+        uint8_t key = keypad_poll();
+        if (key)
+            display[4] = charset[key];
         asm volatile("nop" ::);
     }
 }
