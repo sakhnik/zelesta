@@ -1,10 +1,8 @@
 #include "display.h"
-#include "logo.h"
 #include "defs.h"
-#include "clock.h"
-#include "charset.h"
 #include "beeper.h"
 #include "keypad.h"
+#include "app.h"
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -22,27 +20,27 @@ ISR(TIMER0_OVF_vect)
 #ifdef ARTIFICIAL_JIFFIES
     ++jiffies;
 #endif
-    //if (!logo_done)
-    //    logo_done = !logo_show();
-    //else
-    //    clock_show_running();
+    app_show();
     display_process();
     beeper_process();
 }
 
 ISR(TIMER2_OVF_vect)
 {
-    //if (logo_done)
-    //    clock_process();
+    app_second();
+}
+
+void reset_clock_timer(void)
+{
+    TCNT2 = 0;
 }
 
 int main(void)
 {
     display_init();
-    //logo_init();
-    //clock_init();
     beeper_init();
     keypad_init();
+    app_init();
 
     TIMSK = 0;
 
@@ -55,6 +53,7 @@ int main(void)
     TCCR2 = _BV(CS22) | _BV(CS20); // 128x prescaler
     OCR2 = 0;
     ASSR = _BV(AS2);
+    TCNT2 = 0;
     while ((ASSR & _BV(TCN2UB)) ||
            (ASSR & _BV(TCR2UB)) ||
            (ASSR & _BV(OCR2UB)))
@@ -62,13 +61,24 @@ int main(void)
     TIMSK |= _BV(TOIE2);
 
     sei();
-    beeper_set(440, 255);
+
+    // Just beep
+    beeper_set(440, 0xff);
 
     while (1)
     {
         uint8_t key = keypad_poll();
-        if (key)
-            display[4] = charset[key];
-        asm volatile("nop" ::);
+        switch (key)
+        {
+        case KEY_UP_EVENT(0):
+            app_key_mode();
+            break;
+        case KEY_DOWN_EVENT(1):
+            app_key_adjust();
+            break;
+        case KEY_DOWN_REPEAT(1):
+            app_key_adjust_repeat();
+            break;
+        }
     }
 }
