@@ -3,7 +3,7 @@
 #include "beeper.h"
 #include "display.h"
 #include "charset.h"
-//#include "eeprom.h"
+#include <avr/eeprom.h>
 
 #define ALARM_CFG_ADDR          0x13
 
@@ -15,14 +15,14 @@ enum e_alarm_config
     AC_120_SECS,
 
     AC_LAST
-};
+} alarm_config;
 
-enum e_alarm_config alarm_config;
+uint8_t EEMEM alarm_config_addr = AC_60_SECS;
 
 void alarm_init(void)
 {
     // Initialize the config from EEPROM
-    //alarm_config = EEPROM_READ(ALARM_CFG_ADDR);
+    alarm_config = eeprom_read_byte(&alarm_config_addr);
     if (alarm_config >= AC_LAST)
         alarm_config = AC_60_SECS;
 }
@@ -70,6 +70,7 @@ void alarm_show(void)
     display[0] = charset[0xa];
     display[1] = 0;
     display[2] = 0;
+    display_dots = 0;
     switch (alarm_config)
     {
     case AC_NO_ALARM:
@@ -98,5 +99,5 @@ void alarm_adjust(void)
     if (++alarm_config == AC_LAST)
         alarm_config = AC_NO_ALARM;
     // Store config to EEPROM
-    //EEPROM_WRITE(ALARM_CFG_ADDR, alarm_config);
+    eeprom_write_byte(&alarm_config_addr, alarm_config);
 }
