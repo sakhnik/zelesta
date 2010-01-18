@@ -12,8 +12,6 @@
 volatile uint8_t jiffies = 0;
 #endif
 
-volatile uint8_t logo_done = 0;
-
 ISR(TIMER0_OVF_vect)
 {
     TCNT0 = TCNT0_START;
