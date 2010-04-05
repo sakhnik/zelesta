@@ -2,20 +2,20 @@
 
 const uint8_t charset[CHARSET_SIZE] =
 {
-    0x3f,  // 0
-    0x06,
-    0x5b,
-    0x4f,
-    0x66,
-    0x6d,
-    0x7d,
-    0x07,
-    0x7f,
-    0x6f,  // 9
-    0x77,  // A
-    0x7c,
-    0x39,
-    0x5e,
-    0x79,
-    0x71   // F
+    CHAR_0,  // 0
+    CHAR_1,
+    CHAR_2,
+    CHAR_3,
+    CHAR_4,
+    CHAR_5,
+    CHAR_6,
+    CHAR_7,
+    CHAR_8,
+    CHAR_9,  // 9
+    CHAR_A,  // A
+    CHAR_B,
+    CHAR_C,
+    CHAR_D,
+    CHAR_E,
+    CHAR_F   // F
 };

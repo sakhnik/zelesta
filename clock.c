@@ -63,7 +63,7 @@ void clock_show_adjust_hr(void)
     display[3] = charset[clock_s1];
     display[2] = charset[clock_m0];
     display[1] = charset[clock_m1];
-    display[0] = hidden ? 0 : charset[clock_h0];
+    display[0] = hidden ? CHAR_NONE : charset[clock_h0];
     display_dots = 1;
 }
 
@@ -73,8 +73,8 @@ void clock_show_adjust_min(void)
     uint8_t hidden = ((jiffies - clock_adjust_time) >> 6) & 1;
     display[4] = charset[clock_s0];
     display[3] = charset[clock_s1];
-    display[2] = hidden ? 0 : charset[clock_m0];
-    display[1] = hidden ? 0 : charset[clock_m1];
+    display[2] = hidden ? CHAR_NONE : charset[clock_m0];
+    display[1] = hidden ? CHAR_NONE : charset[clock_m1];
     display[0] = charset[clock_h0];
     display_dots = 1;
 }
@@ -83,8 +83,8 @@ void clock_show_adjust_sec(void)
 {
     // Must blink with sec digits twice a second
     uint8_t hidden = ((jiffies - clock_adjust_time) >> 6) & 1;
-    display[4] = hidden ? 0 : charset[clock_s0];
-    display[3] = hidden ? 0 : charset[clock_s1];
+    display[4] = hidden ? CHAR_NONE : charset[clock_s0];
+    display[3] = hidden ? CHAR_NONE : charset[clock_s1];
     display[2] = charset[clock_m0];
     display[1] = charset[clock_m1];
     display[0] = charset[clock_h0];

@@ -47,18 +47,19 @@ int main(void)
     TCNT0 = TCNT0_START;
     TIMSK |= _BV(TOIE0);
 
+    sei();
+
     // TIMER2 is used as real-time clock
     TCCR2 = _BV(CS22) | _BV(CS20); // 128x prescaler
     OCR2 = 0;
     ASSR = _BV(AS2);
     TCNT2 = 0;
+    // Wait until the TIMER2 gets ready
     while ((ASSR & _BV(TCN2UB)) ||
            (ASSR & _BV(TCR2UB)) ||
            (ASSR & _BV(OCR2UB)))
         asm volatile("nop" ::);
     TIMSK |= _BV(TOIE2);
-
-    sei();
 
     // Just beep
     beeper_set(440, 0xff);

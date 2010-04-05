@@ -5,8 +5,6 @@
 #include "charset.h"
 #include <avr/eeprom.h>
 
-#define ALARM_CFG_ADDR          0x13
-
 enum e_alarm_config
 {
     AC_NO_ALARM = 0,
@@ -17,7 +15,7 @@ enum e_alarm_config
     AC_LAST
 } alarm_config;
 
-uint8_t EEMEM alarm_config_addr = AC_60_SECS;
+uint8_t EEMEM alarm_config_addr;
 
 void alarm_init(void)
 {
@@ -67,28 +65,28 @@ void alarm_process(void)
 
 void alarm_show(void)
 {
-    display[0] = charset[0xa];
-    display[1] = 0;
-    display[2] = 0;
+    display[0] = CHAR_A;
+    display[1] = CHAR_NONE;
+    display[2] = CHAR_NONE;
     display_dots = 0;
     switch (alarm_config)
     {
     case AC_NO_ALARM:
-        display[3] = 0;
-        display[4] = 0;
+        display[3] = CHAR_NONE;
+        display[4] = CHAR_NONE;
         return;
     case AC_30_SECS:
-        display[3] = charset[3];
-        display[4] = charset[0];
+        display[3] = CHAR_3;
+        display[4] = CHAR_0;
         return;
     case AC_60_SECS:
-        display[3] = charset[6];
-        display[4] = charset[0];
+        display[3] = CHAR_6;
+        display[4] = CHAR_0;
         return;
     case AC_120_SECS:
-        display[2] = charset[1];
-        display[3] = charset[2];
-        display[4] = charset[0];
+        display[2] = CHAR_1;
+        display[3] = CHAR_2;
+        display[4] = CHAR_0;
         return;
     default:;
     }

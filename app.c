@@ -15,6 +15,7 @@ enum e_mode
     M_ADJUST_MIN,
     M_ADJUST_SEC,
     M_ADJUST_ALARM,
+    M_ADJUST_LOGO,
 
     M_LAST
 };
@@ -57,6 +58,9 @@ void app_show(void)
         break;
     case M_ADJUST_ALARM:
         alarm_show();
+        break;
+    case M_ADJUST_LOGO:
+        logo_show_adjust();
         break;
     default:;
     }
@@ -106,6 +110,9 @@ void app_key_adjust(void)
         break;
     case M_ADJUST_ALARM:
         alarm_adjust();
+        break;
+    case M_ADJUST_LOGO:
+        logo_adjust();
         break;
     default:;
     }

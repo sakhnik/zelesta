@@ -1,4 +1,5 @@
 #include "display.h"
+#include "charset.h"
 #include <avr/io.h>
 
 // In the circuitry, the low logic level means the diode is lit.
@@ -7,7 +8,7 @@
 #define CATHODE_LEVEL(x)        (~(x))
 
 // Initially no digits are displayed.
-volatile uint8_t display[MAX_ANODES] = { 0, 0, 0, 0, 0 };
+volatile uint8_t display[MAX_ANODES] = { CHAR_NONE };
 volatile uint8_t display_dots = 0;
 
 void display_init(void)
