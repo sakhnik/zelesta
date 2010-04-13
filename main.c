@@ -43,7 +43,7 @@ int main(void)
     TIMSK = 0;
 
     // TIMER0 is used to update the display
-    TCCR0 = _BV(CS11) | _BV(CS10); // 64x prescaler
+    TCCR0 = _BV(CS01); // 8x prescaler
     TCNT0 = TCNT0_START;
     TIMSK |= _BV(TOIE0);
 
