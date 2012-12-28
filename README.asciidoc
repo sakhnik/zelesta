@@ -1,5 +1,4 @@
-Zelesta orienteering start clock
-================================
+== Zelesta orienteering start clock
 
 Firmware for the clock developed for the orienteering club Zelesta
 (Green Stadium). Runs on AVR.
