@@ -78,7 +78,7 @@ PROGRAMMER_MCU=m8
 
 # Name of our project
 # (use a single word, e.g. 'myproject')
-PROJECTNAME=zelesta2
+PROJECTNAME=zelesta
 
 # Source files
 # List C/C++/Assembly source files:
